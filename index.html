@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>红色文化知识题库练习</title>
+<title>红色文化题库练习</title>
 <style>
 /* ===== Reset & Base ===== */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -152,6 +152,38 @@ body {
   box-shadow: 0 4px 12px rgba(102,126,234,0.3);
 }
 
+/* Wrong bank card */
+.wrong-bank-row {
+  display: flex; gap: 12px; align-items: center;
+}
+.wrong-bank-item {
+  flex: 1; display: flex; align-items: center; gap: 10px;
+  padding: 14px 16px; border-radius: 14px; cursor: pointer;
+  background: #fef2f2; border: 2px solid #fecaca;
+  transition: all 0.2s;
+}
+.wrong-bank-item:hover {
+  background: #fee2e2; border-color: #f87171;
+  transform: translateY(-1px); box-shadow: 0 4px 12px rgba(239,68,68,0.12);
+}
+.wrong-bank-item.empty {
+  background: #f8fafc; border-color: #e2e8f0; cursor: default;
+}
+.wrong-bank-item.empty:hover { transform: none; box-shadow: none; background: #f8fafc; }
+.wrong-bank-item .wb-icon { font-size: 1.3rem; flex-shrink: 0; }
+.wrong-bank-item .wb-info { flex: 1; }
+.wrong-bank-item .wb-grade { font-size: 0.85rem; font-weight: 700; color: #1e293b; }
+.wrong-bank-item .wb-count { font-size: 0.75rem; color: #dc2626; }
+.wrong-bank-item.empty .wb-count { color: #94a3b8; }
+
+.btn-clear-wrong {
+  font-size: 0.75rem; color: #94a3b8; background: none;
+  border: 1px solid #e2e8f0; border-radius: 8px;
+  padding: 3px 10px; cursor: pointer; font-family: inherit;
+  transition: all 0.2s;
+}
+.btn-clear-wrong:hover { color: #ef4444; border-color: #fecaca; background: #fef2f2; }
+
 .start-btn { margin-top: 16px; }
 .start-btn .btn { font-size: 1.15rem; padding: 16px 60px; }
 
@@ -275,35 +307,37 @@ body {
   box-shadow: 0 2px 8px rgba(102,126,234,0.12);
 }
 
-/* ===== Unanswered Modal ===== */
+/* ===== Modal (通用弹窗) ===== */
 .modal-overlay {
   position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.4); z-index: 999;
-  display: flex; align-items: center; justify-content: center;
+  background: rgba(15,23,42,0.5); backdrop-filter: blur(4px);
+  z-index: 999; display: flex; align-items: center; justify-content: center;
   animation: fadeIn 0.2s ease;
+  padding: 20px;
 }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
 .modal-dialog {
-  background: #fff; border-radius: 20px; padding: 28px 24px;
-  width: 90%; max-width: 440px; max-height: 70vh;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+  background: #fff; border-radius: 20px; padding: 32px 28px;
+  width: 100%; max-width: 420px; max-height: 75vh; overflow-y: auto;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.25);
   display: flex; flex-direction: column;
-  animation: modalIn 0.3s ease;
+  animation: modalIn 0.3s cubic-bezier(0.16,1,0.3,1);
 }
 @keyframes modalIn {
-  from { opacity: 0; transform: translateY(20px) scale(0.95); }
+  from { opacity: 0; transform: translateY(24px) scale(0.96); }
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
-.modal-dialog h3 { font-size: 1.15rem; color: #1e293b; margin-bottom: 6px; }
-.modal-dialog .modal-desc { font-size: 0.9rem; color: #64748b; margin-bottom: 16px; }
+.modal-dialog .modal-icon { font-size: 2.5rem; text-align: center; margin-bottom: 8px; }
+.modal-dialog h3 { font-size: 1.1rem; color: #1e293b; margin-bottom: 6px; text-align: center; }
+.modal-dialog .modal-desc { font-size: 0.9rem; color: #64748b; margin-bottom: 20px; text-align: center; line-height: 1.6; }
 .modal-unanswered-list {
   display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px;
-  max-height: 200px; overflow-y: auto;
+  max-height: 200px; overflow-y: auto; justify-content: center;
 }
 .modal-unanswered-list .uq-chip {
   display: inline-flex; align-items: center; gap: 2px;
-  padding: 6px 12px; border-radius: 10px;
+  padding: 8px 14px; border-radius: 10px;
   background: #fef2f2; border: 1px solid #fecaca;
   color: #dc2626; font-size: 0.85rem; font-weight: 600;
   cursor: pointer; transition: all 0.2s;
@@ -489,6 +523,37 @@ body {
   font-style: italic;
 }
 
+/* ===== Jump grid (wrong practice mode) ===== */
+.jump-grid { margin-top: 20px; }
+.jump-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.jump-chip {
+  width: 36px; height: 36px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.85rem; font-weight: 700; cursor: pointer;
+  background: #e2e8f0; color: #64748b;
+  transition: all 0.2s;
+}
+.jump-chip:hover { background: #cbd5e1; transform: translateY(-1px); }
+.jump-chip.current { background: #667eea; color: #fff; box-shadow: 0 2px 8px rgba(102,126,234,0.3); }
+.jump-chip.done { background: #10b981; color: #fff; }
+.jump-chip.wrong-done { background: #ef4444; color: #fff; }
+
+/* ===== Instant feedback (wrong practice mode) ===== */
+.instant-feedback {
+  margin-top: 16px; padding: 14px 18px; border-radius: 14px;
+  font-size: 0.95rem; font-weight: 600; line-height: 1.7;
+}
+.instant-feedback.correct {
+  background: #ecfdf5; border: 2px solid #10b981; color: #059669;
+}
+.instant-feedback.wrong {
+  background: #fef2f2; border: 2px solid #ef4444; color: #dc2626;
+}
+.instant-feedback .if-explain {
+  font-weight: 400; font-size: 0.85rem; color: #64748b;
+  display: inline-block; margin-top: 4px;
+}
+
 /* ===== Footer ===== */
 .site-footer {
   text-align: center; padding: 24px 16px;
@@ -525,7 +590,7 @@ body {
   <div id="page-home">
     <div class="home-header">
       <div class="icon">📚</div>
-      <h1>红色文化知识题库练习</h1>
+      <h1>红色文化题库练习</h1>
       <p>选择学段和模式，开始答题吧</p>
     </div>
 
@@ -534,12 +599,12 @@ body {
       <div class="section-label">选择学段</div>
       <div class="grade-grid" id="gradeGrid">
         <div class="grade-card" data-grade="1-3" onclick="selectGrade('1-3')">
-          <div class="grade-icon">🌱</div>
+          <div class="grade-icon">🏫</div>
           <div class="grade-title">1-3 年级</div>
           <div class="grade-info">120 道题目 · 基础常识</div>
         </div>
         <div class="grade-card" data-grade="4-6" onclick="selectGrade('4-6')">
-          <div class="grade-icon">🌿</div>
+          <div class="grade-icon">🎒</div>
           <div class="grade-title">4-6 年级</div>
           <div class="grade-info">150 道题目 · 进阶知识</div>
         </div>
@@ -578,9 +643,33 @@ body {
       </div>
     </div>
 
+    <!-- Wrong question bank -->
+    <div class="card" id="wrongBankCard">
+      <div class="section-label" style="display:flex;justify-content:space-between;align-items:center;">
+        <span>📝 错题库</span>
+        <button class="btn-clear-wrong" onclick="clearWrongBank()" title="清空所有错题">清空</button>
+      </div>
+      <div class="wrong-bank-row" id="wrongBankRow">
+        <div class="wrong-bank-item empty" id="wb13" onclick="startWrongFromHome('1-3')">
+          <span class="wb-icon">🏫</span>
+          <div class="wb-info">
+            <div class="wb-grade">1-3 年级</div>
+            <div class="wb-count" id="wbCount13">暂无错题</div>
+          </div>
+        </div>
+        <div class="wrong-bank-item empty" id="wb46" onclick="startWrongFromHome('4-6')">
+          <span class="wb-icon">🎒</span>
+          <div class="wb-info">
+            <div class="wb-grade">4-6 年级</div>
+            <div class="wb-count" id="wbCount46">暂无错题</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Start button -->
     <div class="start-btn" style="text-align:center;">
-      <button class="btn btn-primary btn-lg" id="startBtn" disabled onclick="handleStart()">
+      <button class="btn btn-primary btn-lg" id="startBtn" onclick="handleStart()">
         开始答题
       </button>
     </div>
@@ -719,6 +808,10 @@ let state = {
   timerInterval: null,
   timeLeft: 0,
   isWrongPractice: false,
+  isInstantMode: false,    // 错题即时反馈模式
+  instantDone: {},         // { questionId: true } 已答对的题
+  autoAdvanceTimer: null,  // 自动跳转定时器
+  instantConfirmed: {},    // { questionId: true } 多选题已确认
 };
 
 /* ===== Select handlers ===== */
@@ -763,11 +856,7 @@ function selectCount(count) {
 
 function updateStartBtn() {
   const btn = document.getElementById('startBtn');
-  if (state.mode === 'learn') {
-    btn.disabled = !state.grade;
-  } else {
-    btn.disabled = !(state.grade && state.mode && state.count);
-  }
+  btn.disabled = false;  // 始终可点击，校验由弹窗处理
 }
 
 /* ===== Page navigation ===== */
@@ -780,6 +869,18 @@ function showPage(pageId) {
 }
 
 function handleStart() {
+  if (!state.grade) {
+    showConfirmModal('🏫', '请选择学段', '选择 1-3年级 或 4-6年级 后开始', '知道了', null, null);
+    return;
+  }
+  if (!state.mode) {
+    showConfirmModal('📋', '请选择模式', '选择练习、考试或学习模式后开始', '知道了', null, null);
+    return;
+  }
+  if (state.mode === 'practice' && !state.count) {
+    showConfirmModal('🔢', '请选择题量', '练习模式需要选择题量（20/50/100）', '知道了', null, null);
+    return;
+  }
   if (state.mode === 'learn') {
     startLearn();
   } else {
@@ -791,7 +892,13 @@ function goHome() {
   stopTimer();
   showPage('page-home');
   state.isWrongPractice = false;
+  state.isInstantMode = false;
+  state.instantDone = {};
+  state.instantConfirmed = {};
   document.getElementById('wrongBanner').classList.add('hidden');
+  document.getElementById('btnSubmit').classList.remove('hidden');
+  document.getElementById('btnPrev').classList.remove('hidden');
+  updateWrongBank();
 }
 
 /* ===== Shuffle ===== */
@@ -853,8 +960,25 @@ function startQuiz() {
   state.answers = {};
   state.timeLeft = state.mode === 'exam' ? 15 * 60 : 0;
   state.isWrongPractice = false;
+  state.isInstantMode = false;
+  state.instantDone = {};
+  state.instantConfirmed = {};
+  clearTimeout(state.autoAdvanceTimer);
 
+  // 重置 UI：显示交卷/上一题按钮，隐藏错题横幅和跳转网格
   document.getElementById('wrongBanner').classList.add('hidden');
+  document.getElementById('btnSubmit').classList.remove('hidden');
+  document.getElementById('btnPrev').classList.remove('hidden');
+  document.getElementById('btnPrev').disabled = true;
+  const btnNext = document.getElementById('btnNext');
+  btnNext.classList.remove('hidden');
+  btnNext.disabled = false;
+  btnNext.textContent = '下一题';
+  btnNext.onclick = nextQuestion;
+  // 清除旧跳转网格（renderQuestion 会重建）
+  const oldGrid = document.getElementById('jumpGrid');
+  if (oldGrid) oldGrid.remove();
+
   showPage('page-quiz');
 
   if (state.mode === 'exam') {
@@ -877,7 +1001,6 @@ function startWrongPractice() {
 
   const allQuestions = state.grade === '1-3' ? window.QUESTIONS_1_3 : window.QUESTIONS_4_6;
   const wrongQuestions = allQuestions.filter(q => wrongIds.includes(q.id));
-  // 按题型排序：单选→多选→判断
   state.questions = [
     ...shuffle(wrongQuestions.filter(q => q.type === 'single')),
     ...shuffle(wrongQuestions.filter(q => q.type === 'multiple')),
@@ -887,10 +1010,15 @@ function startWrongPractice() {
   state.answers = {};
   state.timeLeft = 0;
   state.isWrongPractice = true;
+  state.isInstantMode = true;
+  state.instantDone = {};
+  state.instantConfirmed = {};
 
   document.getElementById('wrongBanner').classList.remove('hidden');
   document.getElementById('wrongBannerCount').textContent = `共 ${state.questions.length} 道错题`;
   document.getElementById('quizTimer').classList.add('hidden');
+  // 即时模式下隐藏交卷按钮
+  document.getElementById('btnSubmit').classList.add('hidden');
   showPage('page-quiz');
 
   renderQuestion();
@@ -988,30 +1116,211 @@ function renderQuestion() {
     optionsList.appendChild(div);
   });
 
+  // 清除旧的即时反馈元素
+  const oldFeedback = document.getElementById('instantFeedback');
+  if (oldFeedback) oldFeedback.remove();
+  const oldConfirm = document.getElementById('btnConfirmMulti');
+  if (oldConfirm) oldConfirm.remove();
+
+  // Instant feedback area
+  let feedbackHtml = '<div class="instant-feedback hidden" id="instantFeedback"></div>';
+  // Multi-select confirm button (only in instant mode)
+  let confirmBtnHtml = '';
+  if (state.isInstantMode && q.type === 'multiple') {
+    confirmBtnHtml = '<button class="btn btn-primary btn-sm" id="btnConfirmMulti" style="margin-top:12px;width:100%;" onclick="confirmMultiAnswer(currentQuestion())">确认答案</button>';
+  }
+  optionsList.insertAdjacentHTML('afterend', feedbackHtml + confirmBtnHtml);
+
+  // If this question was already answered in instant mode, restore feedback state
+  if (state.isInstantMode && state.answers[q.id]) {
+    showInstantFeedback(q, state.answers[q.id]);
+  }
+
   // Update buttons
-  document.getElementById('btnPrev').disabled = state.currentIndex === 0;
-  document.getElementById('btnNext').disabled = state.currentIndex === state.questions.length - 1;
+  if (state.isInstantMode) {
+    document.getElementById('btnPrev').classList.remove('hidden');
+    document.getElementById('btnSubmit').classList.add('hidden');
+    const btnNext = document.getElementById('btnNext');
+    btnNext.classList.remove('hidden');
+    // 找上一个未答对的题
+    let hasPrev = false;
+    for (let i = state.currentIndex - 1; i >= 0; i--) {
+      if (!state.instantDone[state.questions[i].id]) { hasPrev = true; break; }
+    }
+    document.getElementById('btnPrev').disabled = !hasPrev;
+    if (state.answers[q.id]) {
+      updateInstantNav();
+    } else {
+      btnNext.disabled = false;
+      btnNext.textContent = '下一题';
+      btnNext.onclick = () => {
+        // 跳过此题，标记为错误
+        state.instantDone[q.id] = false;
+        addWrongQuestion(q.id);
+        nextQuestion();
+      };
+    }
+    // 渲染题目跳转网格
+    renderJumpGrid(q);
+  } else {
+    document.getElementById('btnPrev').classList.remove('hidden');
+    document.getElementById('btnPrev').disabled = state.currentIndex === 0;
+    document.getElementById('btnSubmit').classList.remove('hidden');
+    const btnNext = document.getElementById('btnNext');
+    btnNext.classList.remove('hidden');
+    btnNext.disabled = state.currentIndex === state.questions.length - 1;
+    btnNext.textContent = state.currentIndex === state.questions.length - 1 ? '最后一题' : '下一题';
+    btnNext.onclick = nextQuestion;
+  }
+
+  // 所有答题模式都渲染题目跳转网格
+  renderJumpGrid(q);
 
   updateProgress();
   updateQuestionNum();
 }
 
+// 题目跳转网格（所有答题模式通用）
+function renderJumpGrid(currentQ) {
+  let grid = document.getElementById('jumpGrid');
+  if (!grid) {
+    grid = document.createElement('div');
+    grid.id = 'jumpGrid';
+    grid.className = 'jump-grid';
+    const card = document.getElementById('questionCard');
+    card.appendChild(grid);
+  }
+  let html = '<div class="section-label" style="margin-top:4px;">题目导航</div><div class="jump-chips">';
+  state.questions.forEach((q, i) => {
+    let cls = '';
+    if (q.id === currentQ.id) {
+      cls = 'current';
+    } else if (state.isInstantMode) {
+      // 错题模式：绿=已答对，红=答错
+      if (state.instantDone[q.id] === true) cls = 'done';
+      else if (state.instantDone[q.id] === false) cls = 'wrong-done';
+    } else {
+      // 练习/考试模式：绿=已作答
+      if (state.answers[q.id]) cls = 'done';
+    }
+    html += `<span class="jump-chip ${cls}" onclick="jumpToQuestion(${i})">${i + 1}</span>`;
+  });
+  html += '</div>';
+  grid.innerHTML = html;
+}
+
+// 跳转到指定题目
+function jumpToQuestion(index) {
+  clearTimeout(state.autoAdvanceTimer);
+  state.currentIndex = index;
+  // 错题模式额外重置
+  if (state.isInstantMode) {
+    state.answers = {};
+    state.instantConfirmed = {};
+    const fb = document.getElementById('instantFeedback');
+    if (fb) fb.classList.add('hidden');
+  }
+  renderQuestion();
+}
+
+// 辅助：获取当前题目对象
+function currentQuestion() {
+  return state.questions[state.currentIndex];
+}
+
 function selectSingleOption(q, label) {
+  if (state.isInstantMode && state.answers[q.id]) return; // 已作答
   state.answers[q.id] = label;
-  refreshOptions(q);
+
+  if (state.isInstantMode) {
+    showInstantFeedback(q, label);
+  } else {
+    refreshOptions(q);
+  }
 }
 
 function toggleMultiOption(q, label) {
+  if (state.isInstantMode && state.instantConfirmed[q.id]) return; // 已确认
   let current = state.answers[q.id] || '';
   if (current.includes(label)) {
     current = current.replace(label, '');
   } else {
     current += label;
   }
-  // Sort labels
   current = current.split('').sort().join('');
   state.answers[q.id] = current;
   refreshOptions(q);
+}
+
+function confirmMultiAnswer(q) {
+  if (!state.answers[q.id]) { showToast('请至少选择一个选项'); return; }
+  state.instantConfirmed[q.id] = true;
+  showInstantFeedback(q, state.answers[q.id]);
+}
+
+function showInstantFeedback(q, userAnswer) {
+  const isCorrect = userAnswer === q.answer;
+  // 禁用所有选项点击
+  document.querySelectorAll('#optionsList .option-item').forEach(item => {
+    item.style.pointerEvents = 'none';
+    const label = item.getAttribute('data-label');
+    item.classList.remove('selected');
+    if (q.answer.includes(label)) {
+      item.classList.add('correct');
+    } else if (userAnswer.includes(label) && !q.answer.includes(label)) {
+      item.classList.add('wrong');
+    }
+  });
+
+  // 显示反馈提示
+  const feedbackEl = document.getElementById('instantFeedback');
+  if (isCorrect) {
+    feedbackEl.className = 'instant-feedback correct';
+    feedbackEl.innerHTML = '✅ 回答正确！已从错题库移除';
+    removeWrongQuestion(q.id);
+    state.instantDone[q.id] = true;
+  } else {
+    feedbackEl.className = 'instant-feedback wrong';
+    feedbackEl.innerHTML = `❌ 回答错误，正确答案是 <strong>${escapeHtml(q.answer)}</strong>`;
+    if (q.explanation) {
+      feedbackEl.innerHTML += `<br><span class="if-explain">💡 ${escapeHtml(q.explanation)}</span>`;
+    }
+    state.instantDone[q.id] = false;
+  }
+  feedbackEl.classList.remove('hidden');
+
+  // 更新导航
+  updateInstantNav();
+
+  // 多选题：隐藏确认按钮
+  const confirmBtn = document.getElementById('btnConfirmMulti');
+  if (confirmBtn) confirmBtn.classList.add('hidden');
+
+  // 自动跳转到下一题（1.5秒后）
+  clearTimeout(state.autoAdvanceTimer);
+  state.autoAdvanceTimer = setTimeout(() => {
+    nextQuestion();
+  }, isCorrect ? 1200 : 2500);
+}
+
+function updateInstantNav() {
+  const btnNext = document.getElementById('btnNext');
+  const remaining = state.questions.filter(q => !state.instantDone[q.id]).length;
+  if (remaining === 0) {
+    btnNext.textContent = '完成练习';
+  } else {
+    btnNext.textContent = `下一题 (剩${remaining}题)`;
+  }
+  btnNext.disabled = false;
+  btnNext.onclick = nextQuestion;  // 恢复正常的下一题逻辑
+  updateWrongBannerCount();
+}
+
+function updateWrongBannerCount() {
+  const remaining = state.questions.filter(q => !state.instantDone[q.id]).length;
+  const total = state.questions.length;
+  document.getElementById('wrongBannerCount').textContent =
+    `剩余 ${remaining}/${total} 道错题`;
 }
 
 function refreshOptions(q) {
@@ -1040,6 +1349,21 @@ function updateProgress() {
 
 /* ===== Navigation ===== */
 function prevQuestion() {
+  clearTimeout(state.autoAdvanceTimer);
+  if (state.isInstantMode) {
+    for (let i = state.currentIndex - 1; i >= 0; i--) {
+      if (!state.instantDone[state.questions[i].id]) {
+        state.currentIndex = i;
+        state.answers = {};
+        state.instantConfirmed = {};
+        const fb = document.getElementById('instantFeedback');
+        if (fb) fb.classList.add('hidden');
+        renderQuestion();
+        return;
+      }
+    }
+    return;
+  }
   if (state.currentIndex > 0) {
     state.currentIndex--;
     renderQuestion();
@@ -1047,10 +1371,37 @@ function prevQuestion() {
 }
 
 function nextQuestion() {
+  clearTimeout(state.autoAdvanceTimer);
+  if (state.isInstantMode) {
+    // 找下一个未答对的题
+    for (let i = state.currentIndex + 1; i < state.questions.length; i++) {
+      if (!state.instantDone[state.questions[i].id]) {
+        state.currentIndex = i;
+        renderQuestion();
+        return;
+      }
+    }
+    // 所有错题都练习完了
+    finishInstantPractice();
+    return;
+  }
   if (state.currentIndex < state.questions.length - 1) {
     state.currentIndex++;
     renderQuestion();
   }
+}
+
+function finishInstantPractice() {
+  const total = state.questions.length;
+  const done = state.questions.filter(q => state.instantDone[q.id]).length;
+  stopTimer();
+  state.isInstantMode = false;
+  document.getElementById('wrongBanner').classList.add('hidden');
+  document.getElementById('btnSubmit').classList.remove('hidden');
+  document.getElementById('btnPrev').classList.remove('hidden');
+  showToast(`错题练习完成！本次答对 ${done}/${total} 题`);
+  updateWrongBank();
+  goHome();
 }
 
 /* ===== Learn Mode ===== */
@@ -1180,14 +1531,49 @@ function goToQuestion(index) {
 
 /* ===== Back to home ===== */
 function confirmBackToHome() {
-  const answered = state.questions.filter(q => state.answers[q.id]).length;
-  if (answered > 0) {
-    if (!confirm('返回首页将丢失当前答题进度，确定要返回吗？')) {
-      return;
-    }
+  // 错题模式直接返回，不弹窗
+  if (state.isInstantMode) {
+    stopTimer();
+    goHome();
+    return;
   }
-  stopTimer();
-  goHome();
+  // 练习/考试模式：始终弹窗确认
+  const answered = state.questions.filter(q => state.answers[q.id]).length;
+  const total = state.questions.length;
+  showConfirmModal(
+    '⚠️', '确定要退出吗？',
+    `已作答 ${answered}/${total} 题，退出后将清空当前答题进度`,
+    '继续答题', '退出',
+    () => { stopTimer(); goHome(); }
+  );
+}
+
+/* ===== Reusable Confirm Modal ===== */
+function showConfirmModal(icon, title, desc, cancelText, confirmText, onConfirm) {
+  closeModal();
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.id = 'confirmModal';
+  const singleBtn = !confirmText;
+  overlay.innerHTML = `
+    <div class="modal-dialog">
+      <div class="modal-icon">${icon}</div>
+      <h3>${title}</h3>
+      <p class="modal-desc">${desc}</p>
+      <div class="modal-actions">
+        <button class="btn ${singleBtn ? 'btn-primary' : 'btn-outline'} btn-sm" id="modalCancel">${cancelText}</button>
+        ${confirmText ? `<button class="btn btn-primary btn-sm" id="modalConfirm">${confirmText}</button>` : ''}
+      </div>
+    </div>
+  `;
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) closeModal();
+  });
+  document.body.appendChild(overlay);
+  document.getElementById('modalCancel').addEventListener('click', closeModal);
+  if (confirmText) {
+    document.getElementById('modalConfirm').addEventListener('click', () => { closeModal(); onConfirm(); });
+  }
 }
 
 /* ===== Unanswered Modal ===== */
@@ -1226,8 +1612,8 @@ function showUnansweredModal(unansweredIndices) {
 }
 
 function closeModal() {
-  const modal = document.getElementById('unansweredModal');
-  if (modal) modal.remove();
+  const modals = document.querySelectorAll('.modal-overlay');
+  modals.forEach(m => m.remove());
 }
 
 /* ===== Summary ===== */
@@ -1363,9 +1749,52 @@ function showToast(msg) {
 }
 
 /* ===== Init ===== */
+/* ===== Wrong Bank on Home ===== */
+function updateWrongBank() {
+  ['1-3', '4-6'].forEach(grade => {
+    const count = getWrongCount(grade);
+    const item = document.getElementById('wb' + grade.replace('-', ''));
+    const countEl = document.getElementById('wbCount' + grade.replace('-', ''));
+    if (count > 0) {
+      item.classList.remove('empty');
+      countEl.textContent = `${count} 道错题`;
+    } else {
+      item.classList.add('empty');
+      countEl.textContent = '暂无错题';
+    }
+  });
+}
+
+function clearWrongBank() {
+  const total = getWrongCount('1-3') + getWrongCount('4-6');
+  if (total === 0) { showToast('错题库已为空'); return; }
+  showConfirmModal('🗑️', '清空错题库？', `将删除全部 ${total} 道错题记录，不可恢复`, '取消', '确认清空', () => {
+    localStorage.removeItem('wrong_1-3');
+    localStorage.removeItem('wrong_4-6');
+    updateWrongBank();
+    showToast('错题库已清空');
+  });
+}
+
+function getWrongCount(grade) {
+  try {
+    const d = localStorage.getItem(`wrong_${grade}`);
+    return d ? JSON.parse(d).length : 0;
+  } catch { return 0; }
+}
+
+function startWrongFromHome(grade) {
+  const key = `wrong_${grade}`;
+  let ids = [];
+  try { const d = localStorage.getItem(key); ids = d ? JSON.parse(d) : []; } catch {}
+  if (ids.length === 0) { showToast('该学段暂无错题'); return; }
+  state.grade = grade;
+  startWrongPractice();
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-  // Load wrong questions count from localStorage
   showPage('page-home');
+  updateWrongBank();
 });
 
 /* ===== Keyboard navigation ===== */
