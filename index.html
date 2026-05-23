@@ -710,6 +710,9 @@ body {
       <button class="btn btn-outline btn-sm" id="btnNext" onclick="nextQuestion()">下一题</button>
       <button class="btn btn-primary btn-sm" id="btnSubmit" onclick="handleSubmit()">交卷</button>
     </div>
+
+    <!-- 题目跳转导航（所有答题模式） -->
+    <div id="jumpGridContainer"></div>
   </div>
 
   <!-- ==================== Page 4: Learn ==================== -->
@@ -765,6 +768,14 @@ body {
       </div>
     </div>
 
+    <!-- Actions -->
+    <div class="summary-actions">
+      <button class="btn btn-outline" onclick="goHome()">返回首页</button>
+      <button class="btn btn-primary" id="btnWrongPractice" onclick="startWrongPractice()">
+        练习错题
+      </button>
+    </div>
+
     <!-- Wrong answers -->
     <div class="card" id="wrongCard">
       <div class="section-label">错题回顾</div>
@@ -773,14 +784,6 @@ body {
         <div class="empty-icon">🌟</div>
         <p>全部正确，太棒了！</p>
       </div>
-    </div>
-
-    <!-- Actions -->
-    <div class="summary-actions">
-      <button class="btn btn-outline" onclick="goHome()">返回首页</button>
-      <button class="btn btn-primary" id="btnWrongPractice" onclick="startWrongPractice()">
-        练习错题
-      </button>
     </div>
   </div>
 
@@ -976,8 +979,8 @@ function startQuiz() {
   btnNext.textContent = '下一题';
   btnNext.onclick = nextQuestion;
   // 清除旧跳转网格（renderQuestion 会重建）
-  const oldGrid = document.getElementById('jumpGrid');
-  if (oldGrid) oldGrid.remove();
+  const container = document.getElementById('jumpGridContainer');
+  if (container) container.innerHTML = '';
 
   showPage('page-quiz');
 
@@ -1182,13 +1185,14 @@ function renderQuestion() {
 
 // 题目跳转网格（所有答题模式通用）
 function renderJumpGrid(currentQ) {
+  const container = document.getElementById('jumpGridContainer');
+  if (!container) return;
   let grid = document.getElementById('jumpGrid');
   if (!grid) {
     grid = document.createElement('div');
     grid.id = 'jumpGrid';
     grid.className = 'jump-grid';
-    const card = document.getElementById('questionCard');
-    card.appendChild(grid);
+    container.appendChild(grid);
   }
   let html = '<div class="section-label" style="margin-top:4px;">题目导航</div><div class="jump-chips">';
   state.questions.forEach((q, i) => {
