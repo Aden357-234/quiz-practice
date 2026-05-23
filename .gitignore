@@ -1,0 +1,17 @@
+# 源文件
+*.pdf
+*.docx
+*.json
+parse_docx.py
+
+# 临时文件
+_check.js
+_inline_check.js
+debug_output.txt
+docx_content.txt
+docx4-6_content.txt
+grades1-3.txt
+grades4-6.txt
+
+# Claude
+.claude/

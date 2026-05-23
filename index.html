@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>红色知识题库练习</title>
+<style>
+/* ===== Reset & Base ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
+  background: #f0f4ff;
+  color: #1e293b;
+  min-height: 100vh;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== Utility ===== */
+.hidden { display: none !important; }
+.container { max-width: 720px; margin: 0 auto; padding: 20px 16px; }
+
+/* ===== Cards ===== */
+.card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 28px 24px;
+  box-shadow: 0 4px 24px rgba(102, 126, 234, 0.08);
+  margin-bottom: 20px;
+}
+
+/* ===== Buttons ===== */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 14px 32px; border: none; border-radius: 14px;
+  font-size: 1rem; font-weight: 600; cursor: pointer;
+  transition: all 0.25s ease;
+  text-decoration: none;
+  font-family: inherit;
+  min-width: 100px;
+}
+.btn:active { transform: scale(0.96); }
+
+.btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.35);
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.45);
+}
+
+.btn-success {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+.btn-success:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+}
+
+.btn-outline {
+  background: #fff; color: #667eea;
+  border: 2px solid #667eea;
+}
+.btn-outline:hover { background: #f0f4ff; transform: translateY(-2px); }
+
+.btn-danger {
+  background: #fff; color: #ef4444;
+  border: 2px solid #ef4444;
+}
+.btn-danger:hover { background: #fef2f2; transform: translateY(-2px); }
+
+.btn-sm { padding: 8px 20px; font-size: 0.875rem; border-radius: 10px; }
+.btn-lg { padding: 18px 40px; font-size: 1.1rem; border-radius: 16px; }
+.btn-block { display: flex; width: 100%; }
+
+/* ===== Page: Home ===== */
+.home-header {
+  text-align: center; padding: 30px 0 10px;
+}
+.home-header .icon {
+  font-size: 3rem; margin-bottom: 8px;
+}
+.home-header h1 {
+  font-size: 1.8rem;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.home-header p {
+  color: #64748b; font-size: 0.95rem; margin-top: 4px;
+}
+
+.section-label {
+  font-size: 0.85rem; color: #64748b; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 1px;
+  margin-bottom: 12px;
+}
+
+/* Grade select */
+.grade-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+}
+.grade-card {
+  background: #fff; border: 2px solid #e2e8f0; border-radius: 18px;
+  padding: 24px 16px; text-align: center; cursor: pointer;
+  transition: all 0.25s ease;
+}
+.grade-card:hover { border-color: #667eea; transform: translateY(-2px); box-shadow: 0 4px 16px rgba(102,126,234,0.12); }
+.grade-card.active {
+  border-color: #667eea; background: #f0f4ff;
+  box-shadow: 0 4px 16px rgba(102,126,234,0.18);
+}
+.grade-card .grade-icon { font-size: 2rem; margin-bottom: 6px; }
+.grade-card .grade-title { font-weight: 700; font-size: 1rem; color: #1e293b; }
+.grade-card .grade-info { font-size: 0.8rem; color: #64748b; margin-top: 4px; }
+
+/* Mode select */
+.mode-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+}
+.mode-card {
+  background: #fff; border: 2px solid #e2e8f0; border-radius: 18px;
+  padding: 20px 16px; text-align: center; cursor: pointer;
+  transition: all 0.25s ease;
+}
+.mode-card:hover { border-color: #764ba2; transform: translateY(-2px); box-shadow: 0 4px 16px rgba(118,75,162,0.12); }
+.mode-card.active {
+  border-color: #764ba2; background: #faf5ff;
+  box-shadow: 0 4px 16px rgba(118,75,162,0.15);
+}
+.mode-card .mode-icon { font-size: 1.8rem; margin-bottom: 4px; }
+.mode-card .mode-title { font-weight: 700; font-size: 1rem; }
+.mode-card .mode-desc { font-size: 0.8rem; color: #64748b; margin-top: 4px; }
+
+/* Count select (practice mode) */
+.count-select {
+  display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+}
+.count-btn {
+  width: 90px; padding: 14px 0; border-radius: 14px; border: 2px solid #e2e8f0;
+  background: #fff; font-size: 1.1rem; font-weight: 700; color: #1e293b;
+  cursor: pointer; transition: all 0.25s ease; text-align: center;
+}
+.count-btn:hover { border-color: #667eea; }
+.count-btn.active {
+  border-color: #667eea; background: #667eea; color: #fff;
+  box-shadow: 0 4px 12px rgba(102,126,234,0.3);
+}
+
+.start-btn { margin-top: 16px; }
+.start-btn .btn { font-size: 1.15rem; padding: 16px 60px; }
+
+/* ===== Page: Quiz ===== */
+.quiz-topbar {
+  background: #fff; border-radius: 20px; padding: 16px 20px;
+  box-shadow: 0 4px 24px rgba(102,126,234,0.08);
+  margin-bottom: 16px;
+}
+.quiz-info-row {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 10px;
+}
+.quiz-info-row:last-child { margin-bottom: 0; }
+.quiz-question-num {
+  font-weight: 700; font-size: 1rem; color: #667eea;
+}
+.quiz-timer {
+  font-weight: 700; font-size: 1.1rem;
+  display: flex; align-items: center; gap: 6px;
+}
+.quiz-timer.warning { color: #ef4444; animation: pulse 0.8s ease-in-out infinite; }
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.progress-bar {
+  height: 8px; background: #e2e8f0; border-radius: 4px; overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%; border-radius: 4px;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  transition: width 0.4s ease;
+}
+
+.question-card {
+  background: #fff; border-radius: 20px; padding: 28px 24px;
+  box-shadow: 0 4px 24px rgba(102,126,234,0.08);
+  margin-bottom: 16px;
+}
+.question-type-badge {
+  display: inline-block; padding: 3px 12px; border-radius: 20px;
+  font-size: 0.75rem; font-weight: 600; margin-bottom: 12px;
+}
+.badge-single { background: #dbeafe; color: #2563eb; }
+.badge-multiple { background: #fef3c7; color: #d97706; }
+.badge-judge { background: #d1fae5; color: #059669; }
+
+.question-text {
+  font-size: 1.1rem; line-height: 1.8; color: #1e293b; margin-bottom: 20px;
+}
+
+/* Options */
+.options-list {
+  display: flex; flex-direction: column; gap: 10px;
+}
+.option-item {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 14px 18px; border: 2px solid #e2e8f0; border-radius: 14px;
+  cursor: pointer; transition: all 0.2s ease;
+  background: #fff;
+}
+.option-item:hover {
+  border-color: #667eea; background: #f8f9ff;
+  transform: translateX(4px);
+}
+.option-item.selected {
+  border-color: #667eea; background: #f0f4ff;
+  box-shadow: 0 2px 8px rgba(102,126,234,0.15);
+}
+.option-item.correct {
+  border-color: #10b981; background: #ecfdf5;
+}
+.option-item.wrong {
+  border-color: #ef4444; background: #fef2f2;
+  animation: shake 0.4s ease;
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(6px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+}
+.option-letter {
+  width: 32px; height: 32px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 0.9rem;
+  background: #e2e8f0; color: #64748b;
+  flex-shrink: 0; transition: all 0.2s ease;
+}
+.option-item.selected .option-letter {
+  background: #667eea; color: #fff;
+}
+.option-item.correct .option-letter {
+  background: #10b981; color: #fff;
+}
+.option-item.wrong .option-letter {
+  background: #ef4444; color: #fff;
+}
+.option-text { flex: 1; padding-top: 4px; font-size: 1rem; }
+
+/* Quiz nav */
+.quiz-nav {
+  display: flex; gap: 12px; justify-content: space-between;
+}
+.quiz-nav .btn { flex: 1; }
+
+.back-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  color: #667eea; font-size: 0.9rem; font-weight: 600; cursor: pointer;
+  border: 2px solid #e2e8f0; background: #fff;
+  padding: 8px 16px; border-radius: 10px;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+.back-link:hover {
+  border-color: #667eea; background: #f0f4ff;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(102,126,234,0.12);
+}
+
+/* ===== Unanswered Modal ===== */
+.modal-overlay {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.4); z-index: 999;
+  display: flex; align-items: center; justify-content: center;
+  animation: fadeIn 0.2s ease;
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.modal-dialog {
+  background: #fff; border-radius: 20px; padding: 28px 24px;
+  width: 90%; max-width: 440px; max-height: 70vh;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+  display: flex; flex-direction: column;
+  animation: modalIn 0.3s ease;
+}
+@keyframes modalIn {
+  from { opacity: 0; transform: translateY(20px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.modal-dialog h3 { font-size: 1.15rem; color: #1e293b; margin-bottom: 6px; }
+.modal-dialog .modal-desc { font-size: 0.9rem; color: #64748b; margin-bottom: 16px; }
+.modal-unanswered-list {
+  display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px;
+  max-height: 200px; overflow-y: auto;
+}
+.modal-unanswered-list .uq-chip {
+  display: inline-flex; align-items: center; gap: 2px;
+  padding: 6px 12px; border-radius: 10px;
+  background: #fef2f2; border: 1px solid #fecaca;
+  color: #dc2626; font-size: 0.85rem; font-weight: 600;
+  cursor: pointer; transition: all 0.2s;
+}
+.modal-unanswered-list .uq-chip:hover {
+  background: #fee2e2; transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(239,68,68,0.15);
+}
+.modal-actions { display: flex; gap: 12px; }
+.modal-actions .btn { flex: 1; }
+
+/* ===== Page: Summary ===== */
+.summary-header {
+  text-align: center; padding: 10px 0;
+}
+.summary-header .result-icon { font-size: 4rem; }
+.summary-header h2 { font-size: 1.5rem; margin-top: 8px; }
+
+.score-ring {
+  position: relative; width: 160px; height: 160px; margin: 20px auto;
+}
+.score-ring svg { transform: rotate(-90deg); }
+.score-ring .bg-circle {
+  fill: none; stroke: #e2e8f0; stroke-width: 12;
+}
+.score-ring .fg-circle {
+  fill: none; stroke-width: 12; stroke-linecap: round;
+  transition: stroke-dashoffset 1s ease 0.3s;
+}
+.score-ring .score-text {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  text-align: center;
+}
+.score-ring .score-num {
+  font-size: 2.5rem; font-weight: 800;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.score-ring .score-label {
+  font-size: 0.85rem; color: #64748b;
+}
+
+.stats-grid {
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;
+  margin: 20px 0;
+}
+.stat-item {
+  text-align: center; padding: 16px 8px; border-radius: 16px; background: #f8fafc;
+}
+.stat-num { font-size: 1.5rem; font-weight: 800; }
+.stat-num.green { color: #10b981; }
+.stat-num.red { color: #ef4444; }
+.stat-label { font-size: 0.8rem; color: #64748b; margin-top: 2px; }
+
+.wrong-list {
+  display: flex; flex-direction: column; gap: 10px; margin-top: 16px;
+}
+.wrong-item {
+  background: #fff; border-left: 4px solid #ef4444; border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.wrong-item .wq-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 6px;
+}
+.wrong-item .wq-num { font-weight: 700; font-size: 0.85rem; color: #ef4444; }
+.wrong-item .wq-type { font-size: 0.75rem; color: #64748b; }
+.wrong-item .wq-question { font-size: 0.95rem; color: #1e293b; margin-bottom: 6px; line-height: 1.6; }
+.wrong-item .wq-answer-row {
+  display: flex; gap: 16px; font-size: 0.85rem; flex-wrap: wrap;
+}
+.wrong-item .wq-your { color: #ef4444; }
+.wrong-item .wq-correct { color: #10b981; }
+.wrong-item .wq-explain { font-size: 0.8rem; color: #64748b; margin-top: 4px; font-style: italic; }
+
+.summary-actions {
+  display: flex; gap: 12px; margin-top: 20px;
+}
+.summary-actions .btn { flex: 1; }
+
+/* ===== Page: Wrong Answer Practice (reuses quiz page) ===== */
+.wrong-practice-banner {
+  background: #fef2f2; border: 2px solid #fecaca; border-radius: 14px;
+  padding: 12px 16px; margin-bottom: 16px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.wrong-practice-banner .banner-text {
+  font-size: 0.9rem; font-weight: 600; color: #dc2626;
+}
+.wrong-practice-banner .banner-count {
+  font-size: 0.85rem; color: #64748b;
+}
+
+/* ===== Toast ===== */
+.toast {
+  position: fixed; top: 24px; left: 50%; transform: translateX(-50%);
+  background: #1e293b; color: #fff; padding: 12px 28px; border-radius: 12px;
+  font-size: 0.9rem; font-weight: 600; z-index: 1000;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  animation: toastIn 0.3s ease;
+  pointer-events: none;
+}
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(-12px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+/* ===== Empty state ===== */
+.empty-state {
+  text-align: center; padding: 40px 20px; color: #64748b;
+}
+.empty-state .empty-icon { font-size: 3rem; margin-bottom: 12px; }
+.empty-state p { font-size: 1rem; }
+
+/* ===== Footer ===== */
+.site-footer {
+  text-align: center; padding: 24px 16px;
+  font-size: 0.7rem; color: #cbd5e1;
+  letter-spacing: 0.5px;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 480px) {
+  .container { padding: 12px 10px; }
+  .card { padding: 20px 16px; border-radius: 16px; }
+  .grade-grid, .mode-grid { gap: 10px; }
+  .grade-card { padding: 18px 10px; }
+  .mode-card { padding: 16px 10px; }
+  .question-text { font-size: 1rem; }
+  .option-item { padding: 12px 14px; }
+  .stats-grid { grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+  .btn { padding: 12px 24px; font-size: 0.9rem; }
+  .btn-lg { padding: 14px 30px; font-size: 1rem; }
+  .home-header h1 { font-size: 1.5rem; }
+  .quiz-nav { flex-wrap: wrap; }
+  .summary-actions { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- ==================== Page 1: Home ==================== -->
+  <div id="page-home">
+    <div class="home-header">
+      <div class="icon">📚</div>
+      <h1>红色知识题库练习</h1>
+      <p>选择学段和模式，开始答题吧</p>
+    </div>
+
+    <!-- Grade selection -->
+    <div class="card">
+      <div class="section-label">选择学段</div>
+      <div class="grade-grid" id="gradeGrid">
+        <div class="grade-card" data-grade="1-3" onclick="selectGrade('1-3')">
+          <div class="grade-icon">🌱</div>
+          <div class="grade-title">1-3 年级</div>
+          <div class="grade-info">120 道题目 · 基础常识</div>
+        </div>
+        <div class="grade-card" data-grade="4-6" onclick="selectGrade('4-6')">
+          <div class="grade-icon">🌿</div>
+          <div class="grade-title">4-6 年级</div>
+          <div class="grade-info">150 道题目 · 进阶知识</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mode selection -->
+    <div class="card" id="modeCard">
+      <div class="section-label">选择模式</div>
+      <div class="mode-grid" id="modeGrid">
+        <div class="mode-card" data-mode="practice" onclick="selectMode('practice')">
+          <div class="mode-icon">✏️</div>
+          <div class="mode-title">练习模式</div>
+          <div class="mode-desc">不限时间 · 自由作答</div>
+        </div>
+        <div class="mode-card" data-mode="exam" onclick="selectMode('exam')">
+          <div class="mode-icon">⏱️</div>
+          <div class="mode-title">考试模式</div>
+          <div class="mode-desc">100题 · 15分钟限时</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Count selection (practice mode only) -->
+    <div class="card hidden" id="countCard">
+      <div class="section-label">选择题量</div>
+      <div class="count-select" id="countSelect">
+        <div class="count-btn" data-count="20" onclick="selectCount(20)">20 题</div>
+        <div class="count-btn" data-count="50" onclick="selectCount(50)">50 题</div>
+        <div class="count-btn" data-count="100" onclick="selectCount(100)">100 题</div>
+      </div>
+    </div>
+
+    <!-- Start button -->
+    <div class="start-btn" style="text-align:center;">
+      <button class="btn btn-primary btn-lg" id="startBtn" disabled onclick="startQuiz()">
+        开始答题
+      </button>
+    </div>
+  </div>
+
+  <!-- ==================== Page 2: Quiz ==================== -->
+  <div id="page-quiz" class="hidden">
+    <!-- Wrong practice banner -->
+    <div class="wrong-practice-banner hidden" id="wrongBanner">
+      <span class="banner-text">📝 错题练习</span>
+      <span class="banner-count" id="wrongBannerCount"></span>
+    </div>
+
+    <!-- Top bar -->
+    <div class="quiz-topbar">
+      <div class="quiz-info-row">
+        <button class="back-link" onclick="confirmBackToHome()">🏠 返回首页</button>
+        <span class="quiz-timer hidden" id="quizTimer">⏱ 15:00</span>
+      </div>
+      <div class="quiz-info-row">
+        <span class="quiz-question-num" id="quizQNum">第 1/20 题</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-bar-fill" id="progressBar" style="width:0%"></div>
+      </div>
+    </div>
+
+    <!-- Question card -->
+    <div class="question-card" id="questionCard">
+      <div class="question-type-badge" id="questionBadge"></div>
+      <div class="question-text" id="questionText"></div>
+      <div class="options-list" id="optionsList"></div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="quiz-nav">
+      <button class="btn btn-outline btn-sm" id="btnPrev" onclick="prevQuestion()">上一题</button>
+      <button class="btn btn-outline btn-sm" id="btnNext" onclick="nextQuestion()">下一题</button>
+      <button class="btn btn-primary btn-sm" id="btnSubmit" onclick="handleSubmit()">交卷</button>
+    </div>
+  </div>
+
+  <!-- ==================== Page 3: Summary ==================== -->
+  <div id="page-summary" class="hidden">
+    <div class="card">
+      <div class="summary-header">
+        <div class="result-icon" id="resultIcon">🎉</div>
+        <h2 id="resultTitle">答题完成！</h2>
+      </div>
+
+      <!-- Score ring -->
+      <div class="score-ring" id="scoreRing">
+        <svg width="160" height="160" viewBox="0 0 160 160">
+          <circle class="bg-circle" cx="80" cy="80" r="70"/>
+          <circle class="fg-circle" id="scoreCircle" cx="80" cy="80" r="70"
+            stroke="#10b981" stroke-dasharray="439.8" stroke-dashoffset="439.8"/>
+        </svg>
+        <div class="score-text">
+          <div class="score-num" id="scorePercent">0%</div>
+          <div class="score-label">正确率</div>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-num green" id="statCorrect">0</div>
+          <div class="stat-label">答对</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num red" id="statWrong">0</div>
+          <div class="stat-label">答错</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num" id="statTotal" style="color:#667eea;">0</div>
+          <div class="stat-label">总题数</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Wrong answers -->
+    <div class="card" id="wrongCard">
+      <div class="section-label">错题回顾</div>
+      <div class="wrong-list" id="wrongList"></div>
+      <div class="empty-state hidden" id="allCorrectState">
+        <div class="empty-icon">🌟</div>
+        <p>全部正确，太棒了！</p>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="summary-actions">
+      <button class="btn btn-outline" onclick="goHome()">返回首页</button>
+      <button class="btn btn-primary" id="btnWrongPractice" onclick="startWrongPractice()">
+        练习错题
+      </button>
+    </div>
+  </div>
+
+</div>
+
+<!-- Footer -->
+<div class="site-footer">Bayi Experimental Primary School · Old Shuikeng Primary School</div>
+
+<!-- Toast container -->
+<div class="toast hidden" id="toast"></div>
+
+<!-- Data -->
+<script src="questions-1-3.js"></script>
+<script src="questions-4-6.js"></script>
+
+<script>
+/* ===== State ===== */
+let state = {
+  grade: null,          // '1-3' | '4-6'
+  mode: null,           // 'practice' | 'exam'
+  count: null,          // 20 | 50 | 100
+  questions: [],        // current quiz questions (shuffled subset)
+  currentIndex: 0,
+  answers: {},          // { questionId: userAnswer }
+  timerInterval: null,
+  timeLeft: 0,
+  isWrongPractice: false,
+};
+
+/* ===== Select handlers ===== */
+function selectGrade(grade) {
+  state.grade = grade;
+  document.querySelectorAll('#gradeGrid .grade-card').forEach(c => c.classList.remove('active'));
+  document.querySelector(`#gradeGrid [data-grade="${grade}"]`).classList.add('active');
+  updateStartBtn();
+}
+
+function selectMode(mode) {
+  state.mode = mode;
+  document.querySelectorAll('#modeGrid .mode-card').forEach(c => c.classList.remove('active'));
+  document.querySelector(`#modeGrid [data-mode="${mode}"]`).classList.add('active');
+
+  const countCard = document.getElementById('countCard');
+  if (mode === 'practice') {
+    countCard.classList.remove('hidden');
+    state.count = null;
+    document.querySelectorAll('#countSelect .count-btn').forEach(c => c.classList.remove('active'));
+  } else {
+    countCard.classList.add('hidden');
+    state.count = 100;
+  }
+  updateStartBtn();
+}
+
+function selectCount(count) {
+  state.count = count;
+  document.querySelectorAll('#countSelect .count-btn').forEach(c => c.classList.remove('active'));
+  document.querySelector(`#countSelect [data-count="${count}"]`).classList.add('active');
+  updateStartBtn();
+}
+
+function updateStartBtn() {
+  const btn = document.getElementById('startBtn');
+  btn.disabled = !(state.grade && state.mode && state.count);
+}
+
+/* ===== Page navigation ===== */
+function showPage(pageId) {
+  ['page-home', 'page-quiz', 'page-summary'].forEach(id => {
+    document.getElementById(id).classList.add('hidden');
+  });
+  document.getElementById(pageId).classList.remove('hidden');
+}
+
+function goHome() {
+  stopTimer();
+  showPage('page-home');
+  state.isWrongPractice = false;
+  document.getElementById('wrongBanner').classList.add('hidden');
+}
+
+/* ===== Shuffle ===== */
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+/* ===== Start Quiz ===== */
+function selectByType(allQuestions, count) {
+  // 按题型分组，组内随机打乱，按 单选→多选→判断 顺序排列
+  const singles = shuffle(allQuestions.filter(q => q.type === 'single'));
+  const multis = shuffle(allQuestions.filter(q => q.type === 'multiple'));
+  const judges = shuffle(allQuestions.filter(q => q.type === 'judge'));
+
+  const total = allQuestions.length;
+  // 按比例分配，优先保证单选的权重
+  let sCount = Math.round((singles.length / total) * count);
+  let mCount = Math.round((multis.length / total) * count);
+  let jCount = count - sCount - mCount;
+
+  // 修正边界情况
+  if (jCount < 0) { mCount += jCount; jCount = 0; }
+  if (mCount < 0) { sCount += mCount; mCount = 0; }
+  if (sCount > singles.length) {
+    const extra = sCount - singles.length;
+    sCount = singles.length;
+    // 把多余的分配给其他类型
+    if (mCount + extra <= multis.length) { mCount += extra; }
+    else { jCount += extra; }
+  }
+  if (mCount > multis.length) { mCount = multis.length; }
+  if (jCount > judges.length) { jCount = judges.length; }
+
+  // 补齐不足
+  while (sCount + mCount + jCount < count) {
+    const need = count - (sCount + mCount + jCount);
+    if (sCount < singles.length) { sCount++; continue; }
+    if (mCount < multis.length) { mCount++; continue; }
+    if (jCount < judges.length) { jCount++; continue; }
+    break;
+  }
+
+  return [
+    ...singles.slice(0, sCount),
+    ...multis.slice(0, mCount),
+    ...judges.slice(0, jCount)
+  ];
+}
+
+function startQuiz() {
+  const allQuestions = state.grade === '1-3' ? window.QUESTIONS_1_3 : window.QUESTIONS_4_6;
+  state.questions = selectByType(allQuestions, state.count);
+  state.currentIndex = 0;
+  state.answers = {};
+  state.timeLeft = state.mode === 'exam' ? 15 * 60 : 0;
+  state.isWrongPractice = false;
+
+  document.getElementById('wrongBanner').classList.add('hidden');
+  showPage('page-quiz');
+
+  if (state.mode === 'exam') {
+    document.getElementById('quizTimer').classList.remove('hidden');
+    startTimer();
+  } else {
+    document.getElementById('quizTimer').classList.add('hidden');
+  }
+
+  renderQuestion();
+  updateProgress();
+}
+
+function startWrongPractice() {
+  const wrongIds = getWrongQuestions();
+  if (wrongIds.length === 0) {
+    showToast('没有错题可练习');
+    return;
+  }
+
+  const allQuestions = state.grade === '1-3' ? window.QUESTIONS_1_3 : window.QUESTIONS_4_6;
+  const wrongQuestions = allQuestions.filter(q => wrongIds.includes(q.id));
+  // 按题型排序：单选→多选→判断
+  state.questions = [
+    ...shuffle(wrongQuestions.filter(q => q.type === 'single')),
+    ...shuffle(wrongQuestions.filter(q => q.type === 'multiple')),
+    ...shuffle(wrongQuestions.filter(q => q.type === 'judge'))
+  ];
+  state.currentIndex = 0;
+  state.answers = {};
+  state.timeLeft = 0;
+  state.isWrongPractice = true;
+
+  document.getElementById('wrongBanner').classList.remove('hidden');
+  document.getElementById('wrongBannerCount').textContent = `共 ${state.questions.length} 道错题`;
+  document.getElementById('quizTimer').classList.add('hidden');
+  showPage('page-quiz');
+
+  renderQuestion();
+  updateProgress();
+}
+
+/* ===== Timer ===== */
+function startTimer() {
+  stopTimer();
+  updateTimerDisplay();
+  state.timerInterval = setInterval(() => {
+    state.timeLeft--;
+    updateTimerDisplay();
+    if (state.timeLeft <= 0) {
+      doSubmit();
+    }
+  }, 1000);
+}
+
+function stopTimer() {
+  if (state.timerInterval) {
+    clearInterval(state.timerInterval);
+    state.timerInterval = null;
+  }
+}
+
+function updateTimerDisplay() {
+  const el = document.getElementById('quizTimer');
+  const m = Math.floor(state.timeLeft / 60);
+  const s = state.timeLeft % 60;
+  el.textContent = `⏱ ${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+  if (state.timeLeft <= 60) {
+    el.classList.add('warning');
+  } else {
+    el.classList.remove('warning');
+  }
+}
+
+/* ===== Render Question ===== */
+function renderQuestion() {
+  const q = state.questions[state.currentIndex];
+  if (!q) return;
+
+  // Badge
+  const badge = document.getElementById('questionBadge');
+  if (q.type === 'single') {
+    badge.textContent = '单选题';
+    badge.className = 'question-type-badge badge-single';
+  } else if (q.type === 'multiple') {
+    badge.textContent = '多选题';
+    badge.className = 'question-type-badge badge-multiple';
+  } else {
+    badge.textContent = '判断题';
+    badge.className = 'question-type-badge badge-judge';
+  }
+
+  // Question text
+  document.getElementById('questionText').textContent = q.question;
+
+  // Options
+  const optionsList = document.getElementById('optionsList');
+  optionsList.innerHTML = '';
+
+  const userAnswer = state.answers[q.id] || '';
+
+  q.options.forEach(opt => {
+    const div = document.createElement('div');
+    div.className = 'option-item';
+    div.setAttribute('data-label', opt.label);
+
+    const letter = document.createElement('span');
+    letter.className = 'option-letter';
+    letter.textContent = opt.label;
+
+    const text = document.createElement('span');
+    text.className = 'option-text';
+    text.textContent = opt.text;
+
+    div.appendChild(letter);
+    div.appendChild(text);
+
+    // Check if selected
+    if (q.type === 'multiple') {
+      if (userAnswer.includes(opt.label)) {
+        div.classList.add('selected');
+      }
+      div.addEventListener('click', () => toggleMultiOption(q, opt.label));
+    } else {
+      if (userAnswer === opt.label) {
+        div.classList.add('selected');
+      }
+      div.addEventListener('click', () => selectSingleOption(q, opt.label));
+    }
+
+    optionsList.appendChild(div);
+  });
+
+  // Update buttons
+  document.getElementById('btnPrev').disabled = state.currentIndex === 0;
+  document.getElementById('btnNext').disabled = state.currentIndex === state.questions.length - 1;
+
+  updateProgress();
+  updateQuestionNum();
+}
+
+function selectSingleOption(q, label) {
+  state.answers[q.id] = label;
+  refreshOptions(q);
+}
+
+function toggleMultiOption(q, label) {
+  let current = state.answers[q.id] || '';
+  if (current.includes(label)) {
+    current = current.replace(label, '');
+  } else {
+    current += label;
+  }
+  // Sort labels
+  current = current.split('').sort().join('');
+  state.answers[q.id] = current;
+  refreshOptions(q);
+}
+
+function refreshOptions(q) {
+  const userAnswer = state.answers[q.id] || '';
+  document.querySelectorAll('#optionsList .option-item').forEach(item => {
+    const label = item.getAttribute('data-label');
+    if (q.type === 'multiple') {
+      item.classList.toggle('selected', userAnswer.includes(label));
+    } else {
+      item.classList.toggle('selected', userAnswer === label);
+    }
+  });
+}
+
+function updateQuestionNum() {
+  document.getElementById('quizQNum').textContent =
+    `第 ${state.currentIndex + 1}/${state.questions.length} 题`;
+}
+
+function updateProgress() {
+  const pct = state.questions.length > 0
+    ? ((state.currentIndex + 1) / state.questions.length) * 100
+    : 0;
+  document.getElementById('progressBar').style.width = pct + '%';
+}
+
+/* ===== Navigation ===== */
+function prevQuestion() {
+  if (state.currentIndex > 0) {
+    state.currentIndex--;
+    renderQuestion();
+  }
+}
+
+function nextQuestion() {
+  if (state.currentIndex < state.questions.length - 1) {
+    state.currentIndex++;
+    renderQuestion();
+  }
+}
+
+/* ===== Submit ===== */
+function handleSubmit() {
+  const unanswered = [];
+  state.questions.forEach((q, i) => {
+    if (!state.answers[q.id]) {
+      unanswered.push(i);
+    }
+  });
+
+  if (unanswered.length > 0) {
+    showUnansweredModal(unanswered);
+  } else {
+    doSubmit();
+  }
+}
+
+function doSubmit() {
+  closeModal();
+  stopTimer();
+
+  // Auto-fill unanswered
+  state.questions.forEach(q => {
+    if (!state.answers[q.id]) {
+      state.answers[q.id] = '';
+    }
+  });
+
+  // Update wrong question collection in localStorage
+  state.questions.forEach(q => {
+    const userAnswer = state.answers[q.id] || '';
+    if (userAnswer === q.answer) {
+      removeWrongQuestion(q.id);
+    } else {
+      addWrongQuestion(q.id);
+    }
+  });
+
+  renderSummary();
+  showPage('page-summary');
+}
+
+function goToQuestion(index) {
+  closeModal();
+  state.currentIndex = index;
+  renderQuestion();
+}
+
+/* ===== Back to home ===== */
+function confirmBackToHome() {
+  const answered = state.questions.filter(q => state.answers[q.id]).length;
+  if (answered > 0) {
+    if (!confirm('返回首页将丢失当前答题进度，确定要返回吗？')) {
+      return;
+    }
+  }
+  stopTimer();
+  goHome();
+}
+
+/* ===== Unanswered Modal ===== */
+function showUnansweredModal(unansweredIndices) {
+  // Remove existing modal
+  closeModal();
+
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.id = 'unansweredModal';
+
+  const chips = unansweredIndices.map(i => {
+    const q = state.questions[i];
+    const typeLabel = q.type === 'single' ? '单选' : q.type === 'multiple' ? '多选' : '判断';
+    return `<span class="uq-chip" onclick="goToQuestion(${i})">${typeLabel} #${i + 1}</span>`;
+  }).join('');
+
+  overlay.innerHTML = `
+    <div class="modal-dialog">
+      <h3>还有 ${unansweredIndices.length} 道题未作答</h3>
+      <p class="modal-desc">点击题号可跳转作答，或直接确认交卷</p>
+      <div class="modal-unanswered-list">${chips}</div>
+      <div class="modal-actions">
+        <button class="btn btn-outline btn-sm" onclick="closeModal()">继续答题</button>
+        <button class="btn btn-danger btn-sm" onclick="doSubmit()">确认交卷</button>
+      </div>
+    </div>
+  `;
+
+  // Close on overlay click
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) closeModal();
+  });
+
+  document.body.appendChild(overlay);
+}
+
+function closeModal() {
+  const modal = document.getElementById('unansweredModal');
+  if (modal) modal.remove();
+}
+
+/* ===== Summary ===== */
+function renderSummary() {
+  let correct = 0;
+  let wrong = 0;
+  const wrongQuestions = [];
+
+  state.questions.forEach(q => {
+    const userAnswer = state.answers[q.id] || '';
+    const correctAnswer = q.answer;
+    const isCorrect = userAnswer === correctAnswer;
+
+    if (isCorrect) {
+      correct++;
+    } else {
+      wrong++;
+      wrongQuestions.push({
+        ...q,
+        userAnswer: userAnswer || '(未作答)',
+      });
+    }
+  });
+
+  const total = state.questions.length;
+  const pct = total > 0 ? Math.round((correct / total) * 100) : 0;
+
+  // Result icon & title
+  let icon, title;
+  if (pct >= 90) { icon = '🎉'; title = '太棒了！'; }
+  else if (pct >= 70) { icon = '👍'; title = '做得不错！'; }
+  else if (pct >= 60) { icon = '💪'; title = '继续加油！'; }
+  else { icon = '📖'; title = '多多练习！'; }
+  document.getElementById('resultIcon').textContent = icon;
+  document.getElementById('resultTitle').textContent = title;
+
+  // Stats
+  document.getElementById('statCorrect').textContent = correct;
+  document.getElementById('statWrong').textContent = wrong;
+  document.getElementById('statTotal').textContent = total;
+  document.getElementById('scorePercent').textContent = pct + '%';
+
+  // Score ring
+  const circle = document.getElementById('scoreCircle');
+  const circumference = 2 * Math.PI * 70; // ~439.8
+  const offset = circumference - (pct / 100) * circumference;
+  circle.style.strokeDasharray = circumference;
+  circle.style.strokeDashoffset = offset;
+  circle.style.stroke = pct >= 60 ? '#10b981' : '#ef4444';
+
+  // Wrong list
+  const wrongList = document.getElementById('wrongList');
+  const allCorrectState = document.getElementById('allCorrectState');
+  const wrongCard = document.getElementById('wrongCard');
+  const btnWrongPractice = document.getElementById('btnWrongPractice');
+
+  wrongList.innerHTML = '';
+
+  if (wrongQuestions.length === 0) {
+    allCorrectState.classList.remove('hidden');
+    wrongList.classList.add('hidden');
+    btnWrongPractice.classList.add('hidden');
+  } else {
+    allCorrectState.classList.add('hidden');
+    wrongList.classList.remove('hidden');
+    btnWrongPractice.classList.remove('hidden');
+
+    wrongQuestions.forEach((q, i) => {
+      const div = document.createElement('div');
+      div.className = 'wrong-item';
+      div.innerHTML = `
+        <div class="wq-header">
+          <span class="wq-num">错题 ${i + 1}</span>
+          <span class="wq-type">${q.type === 'single' ? '单选' : q.type === 'multiple' ? '多选' : '判断'}</span>
+        </div>
+        <div class="wq-question">${escapeHtml(q.question)}</div>
+        <div class="wq-answer-row">
+          <span class="wq-your">你的答案：<strong>${escapeHtml(q.userAnswer)}</strong></span>
+          <span class="wq-correct">正确答案：<strong>${escapeHtml(q.answer)}</strong></span>
+        </div>
+        ${q.explanation ? `<div class="wq-explain">💡 ${escapeHtml(q.explanation)}</div>` : ''}
+      `;
+      wrongList.appendChild(div);
+    });
+  }
+}
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+/* ===== Wrong Questions Storage ===== */
+function getWrongQuestions() {
+  try {
+    const key = `wrong_${state.grade}`;
+    const data = localStorage.getItem(key);
+    return data ? JSON.parse(data) : [];
+  } catch { return []; }
+}
+
+function addWrongQuestion(id) {
+  try {
+    const key = `wrong_${state.grade}`;
+    const existing = getWrongQuestions();
+    if (!existing.includes(id)) {
+      existing.push(id);
+      localStorage.setItem(key, JSON.stringify(existing));
+    }
+  } catch { /* ignore */ }
+}
+
+function removeWrongQuestion(id) {
+  try {
+    const key = `wrong_${state.grade}`;
+    const existing = getWrongQuestions();
+    const filtered = existing.filter(x => x !== id);
+    if (filtered.length === 0) {
+      localStorage.removeItem(key);
+    } else {
+      localStorage.setItem(key, JSON.stringify(filtered));
+    }
+  } catch { /* ignore */ }
+}
+
+/* ===== Toast ===== */
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.remove('hidden');
+  setTimeout(() => toast.classList.add('hidden'), 2000);
+}
+
+/* ===== Init ===== */
+document.addEventListener('DOMContentLoaded', () => {
+  // Load wrong questions count from localStorage
+  showPage('page-home');
+});
+
+/* ===== Keyboard navigation ===== */
+document.addEventListener('keydown', (e) => {
+  const quizPage = document.getElementById('page-quiz');
+  if (quizPage.classList.contains('hidden')) return;
+
+  if (e.key === 'ArrowLeft') prevQuestion();
+  if (e.key === 'ArrowRight') nextQuestion();
+
+  // Number keys for options (1-4)
+  const q = state.questions[state.currentIndex];
+  if (q && e.key >= '1' && e.key <= '4') {
+    const idx = parseInt(e.key) - 1;
+    if (idx < q.options.length) {
+      const label = q.options[idx].label;
+      if (q.type === 'multiple') {
+        toggleMultiOption(q, label);
+      } else {
+        selectSingleOption(q, label);
+      }
+    }
+  }
+});
+</script>
+
+</body>
+</html>
