@@ -19,26 +19,26 @@ body {
 
 /* ===== Utility ===== */
 .hidden { display: none !important; }
-.container { max-width: 720px; margin: 0 auto; padding: 20px 16px; }
+.container { max-width: 720px; margin: 0 auto; padding: 12px 16px; }
 
 /* ===== Cards ===== */
 .card {
   background: #fff;
   border-radius: 20px;
-  padding: 28px 24px;
+  padding: 20px 20px;
   box-shadow: 0 4px 24px rgba(102, 126, 234, 0.08);
-  margin-bottom: 20px;
+  margin-bottom: 14px;
 }
 
 /* ===== Buttons ===== */
 .btn {
   display: inline-flex; align-items: center; justify-content: center;
-  padding: 14px 32px; border: none; border-radius: 14px;
-  font-size: 1rem; font-weight: 600; cursor: pointer;
+  padding: 12px 28px; border: none; border-radius: 14px;
+  font-size: 0.95rem; font-weight: 600; cursor: pointer;
   transition: all 0.25s ease;
   text-decoration: none;
   font-family: inherit;
-  min-width: 100px;
+  min-width: 80px;
 }
 .btn:active { transform: scale(0.96); }
 
@@ -80,13 +80,13 @@ body {
 
 /* ===== Page: Home ===== */
 .home-header {
-  text-align: center; padding: 30px 0 10px;
+  text-align: center; padding: 12px 0 6px;
 }
 .home-header .icon {
-  font-size: 3rem; margin-bottom: 8px;
+  font-size: 2.2rem; margin-bottom: 4px;
 }
 .home-header h1 {
-  font-size: 1.8rem;
+  font-size: 1.5rem;
   background: linear-gradient(135deg, #667eea, #764ba2);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -107,7 +107,7 @@ body {
 }
 .grade-card {
   background: #fff; border: 2px solid #e2e8f0; border-radius: 18px;
-  padding: 24px 16px; text-align: center; cursor: pointer;
+  padding: 18px 14px; text-align: center; cursor: pointer;
   transition: all 0.25s ease;
 }
 .grade-card:hover { border-color: #667eea; transform: translateY(-2px); box-shadow: 0 4px 16px rgba(102,126,234,0.12); }
@@ -125,7 +125,7 @@ body {
 }
 .mode-card {
   background: #fff; border: 2px solid #e2e8f0; border-radius: 18px;
-  padding: 20px 16px; text-align: center; cursor: pointer;
+  padding: 16px 12px; text-align: center; cursor: pointer;
   transition: all 0.25s ease;
 }
 .mode-card:hover { border-color: #764ba2; transform: translateY(-2px); box-shadow: 0 4px 16px rgba(118,75,162,0.12); }
@@ -184,14 +184,14 @@ body {
 }
 .btn-clear-wrong:hover { color: #ef4444; border-color: #fecaca; background: #fef2f2; }
 
-.start-btn { margin-top: 16px; }
-.start-btn .btn { font-size: 1.15rem; padding: 16px 60px; }
+.start-btn { margin-top: 12px; }
+.start-btn .btn { font-size: 1.1rem; padding: 14px 50px; }
 
 /* ===== Page: Quiz ===== */
 .quiz-topbar {
-  background: #fff; border-radius: 20px; padding: 16px 20px;
+  background: #fff; border-radius: 20px; padding: 12px 18px;
   box-shadow: 0 4px 24px rgba(102,126,234,0.08);
-  margin-bottom: 16px;
+  margin-bottom: 10px;
 }
 .quiz-info-row {
   display: flex; align-items: center; justify-content: space-between;
@@ -221,9 +221,9 @@ body {
 }
 
 .question-card {
-  background: #fff; border-radius: 20px; padding: 28px 24px;
+  background: #fff; border-radius: 20px; padding: 20px 20px;
   box-shadow: 0 4px 24px rgba(102,126,234,0.08);
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 .question-type-badge {
   display: inline-block; padding: 3px 12px; border-radius: 20px;
@@ -423,7 +423,7 @@ body {
 /* ===== Page: Wrong Answer Practice (reuses quiz page) ===== */
 .wrong-practice-banner {
   background: #fef2f2; border: 2px solid #fecaca; border-radius: 14px;
-  padding: 12px 16px; margin-bottom: 16px;
+  padding: 10px 14px; margin-bottom: 10px;
   display: flex; align-items: center; justify-content: space-between;
 }
 .wrong-practice-banner .banner-text {
@@ -479,9 +479,9 @@ body {
   padding: 12px 0 8px; margin-top: 8px;
 }
 .learn-question-card {
-  background: #fff; border-radius: 16px; padding: 20px;
+  background: #fff; border-radius: 16px; padding: 16px;
   box-shadow: 0 2px 12px rgba(0,0,0,0.04);
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   border-left: 4px solid #10b981;
 }
 .learn-question-card .lq-header {
@@ -524,7 +524,7 @@ body {
 }
 
 /* ===== Jump grid (wrong practice mode) ===== */
-.jump-grid { margin-top: 20px; }
+.jump-grid { margin-top: 12px; }
 .jump-chips { display: flex; flex-wrap: wrap; gap: 8px; }
 .jump-chip {
   width: 36px; height: 36px; border-radius: 10px;
@@ -556,29 +556,41 @@ body {
 
 /* ===== Footer ===== */
 .site-footer {
-  text-align: center; padding: 24px 16px;
+  text-align: center; padding: 16px 16px;
   font-size: 0.7rem; color: #cbd5e1;
   letter-spacing: 0.5px;
 }
 
 /* ===== Responsive ===== */
 @media (max-width: 480px) {
-  .container { padding: 12px 10px; }
-  .card { padding: 20px 16px; border-radius: 16px; }
-  .grade-grid { gap: 10px; }
-  .mode-grid { gap: 8px; }
-  .grade-card { padding: 18px 10px; }
-  .mode-card { padding: 14px 8px; }
-  .mode-card .mode-title { font-size: 0.85rem; }
-  .mode-card .mode-desc { font-size: 0.7rem; }
-  .question-text { font-size: 1rem; }
-  .option-item { padding: 12px 14px; }
-  .stats-grid { grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
-  .btn { padding: 12px 24px; font-size: 0.9rem; }
-  .btn-lg { padding: 14px 30px; font-size: 1rem; }
-  .home-header h1 { font-size: 1.5rem; }
-  .quiz-nav { flex-wrap: wrap; }
+  .container { padding: 8px 8px; }
+  .card { padding: 16px 14px; border-radius: 16px; margin-bottom: 10px; }
+  .grade-grid { gap: 8px; }
+  .mode-grid { gap: 6px; }
+  .grade-card { padding: 14px 8px; }
+  .mode-card { padding: 12px 6px; }
+  .mode-card .mode-icon { font-size: 1.4rem; }
+  .mode-card .mode-title { font-size: 0.8rem; }
+  .mode-card .mode-desc { font-size: 0.65rem; }
+  .question-text { font-size: 0.95rem; }
+  .option-item { padding: 10px 12px; }
+  .stats-grid { grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
+  .btn { padding: 10px 18px; font-size: 0.85rem; }
+  .btn-lg { padding: 12px 24px; font-size: 0.95rem; }
+  .btn-sm { padding: 6px 14px; font-size: 0.8rem; }
+  .home-header { padding: 8px 0 4px; }
+  .home-header .icon { font-size: 1.8rem; }
+  .home-header h1 { font-size: 1.3rem; }
+  .home-header p { font-size: 0.8rem; }
+  .quiz-nav { flex-wrap: wrap; gap: 8px; }
+  .quiz-nav .btn { flex: 1; min-width: 0; }
   .summary-actions { flex-direction: column; }
+  .question-card { padding: 16px 14px; }
+  .quiz-topbar { padding: 12px 14px; }
+  .section-label { font-size: 0.75rem; margin-bottom: 8px; }
+  .wrong-bank-item { padding: 10px 12px; }
+  .jump-chip { width: 30px; height: 30px; font-size: 0.75rem; }
+  .learn-question-card { padding: 14px; }
 }
 </style>
 </head>
@@ -869,6 +881,7 @@ function showPage(pageId) {
     if (el) el.classList.add('hidden');
   });
   document.getElementById(pageId).classList.remove('hidden');
+  window.scrollTo({ top: 0, behavior: 'instant' });
 }
 
 function handleStart() {
