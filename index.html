@@ -924,6 +924,17 @@ function goHome() {
   updateWrongBank();
 }
 
+/* ===== Data access ===== */
+function getQuestionsByGrade(grade) {
+  const key = grade === '1-3' ? 'QUESTIONS_1_3' : 'QUESTIONS_4_6';
+  const questions = window[key];
+  if (!Array.isArray(questions) || questions.length === 0) {
+    showToast('题库数据加载失败，请刷新页面重试');
+    return null;
+  }
+  return questions;
+}
+
 /* ===== Shuffle ===== */
 function shuffle(arr) {
   const a = [...arr];
@@ -977,7 +988,8 @@ function selectByType(allQuestions, count) {
 }
 
 function startQuiz() {
-  const allQuestions = state.grade === '1-3' ? window.QUESTIONS_1_3 : window.QUESTIONS_4_6;
+  const allQuestions = getQuestionsByGrade(state.grade);
+  if (!allQuestions) return;
   state.questions = selectByType(allQuestions, state.count);
   state.currentIndex = 0;
   state.answers = {};
@@ -1022,7 +1034,8 @@ function startWrongPractice() {
     return;
   }
 
-  const allQuestions = state.grade === '1-3' ? window.QUESTIONS_1_3 : window.QUESTIONS_4_6;
+  const allQuestions = getQuestionsByGrade(state.grade);
+  if (!allQuestions) return;
   const wrongQuestions = allQuestions.filter(q => wrongIds.includes(q.id));
   state.questions = [
     ...shuffle(wrongQuestions.filter(q => q.type === 'single')),
@@ -1051,14 +1064,16 @@ function startWrongPractice() {
 /* ===== Timer ===== */
 function startTimer() {
   stopTimer();
+  state._timerEndAt = Date.now() + state.timeLeft * 1000;
   updateTimerDisplay();
   state.timerInterval = setInterval(() => {
-    state.timeLeft--;
+    const remaining = Math.max(0, Math.ceil((state._timerEndAt - Date.now()) / 1000));
+    state.timeLeft = remaining;
     updateTimerDisplay();
-    if (state.timeLeft <= 0) {
+    if (remaining <= 0) {
       doSubmit();
     }
-  }, 1000);
+  }, 250);
 }
 
 function stopTimer() {
@@ -1433,8 +1448,8 @@ let learnQuestions = [];
 let learnFilter = 'all';
 
 function startLearn() {
-  const allQuestions = state.grade === '1-3' ? window.QUESTIONS_1_3 : window.QUESTIONS_4_6;
-  // 按题型排序：单选→多选→判断
+  const allQuestions = getQuestionsByGrade(state.grade);
+  if (!allQuestions) return;
   learnQuestions = [
     ...allQuestions.filter(q => q.type === 'single'),
     ...allQuestions.filter(q => q.type === 'multiple'),
@@ -1465,6 +1480,7 @@ function renderLearnList() {
   let html = '';
   let currentType = '';
   const typeNames = { single: '单选题', multiple: '多选题', judge: '判断题' };
+  const indexMap = new Map(learnQuestions.map((q, i) => [q.id, i + 1]));
 
   filtered.forEach((q, i) => {
     if (q.type !== currentType) {
@@ -1484,7 +1500,7 @@ function renderLearnList() {
         </div>`;
     });
 
-    const globalIdx = learnQuestions.indexOf(q) + 1;
+    const globalIdx = indexMap.get(q.id);
 
     html += `
       <div class="learn-question-card">
@@ -1726,9 +1742,13 @@ function renderSummary() {
 }
 
 function escapeHtml(str) {
-  const div = document.createElement('div');
-  div.textContent = str;
-  return div.innerHTML;
+  if (str == null) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 }
 
 /* ===== Wrong Questions Storage ===== */
@@ -1765,11 +1785,17 @@ function removeWrongQuestion(id) {
 }
 
 /* ===== Toast ===== */
+let toastTimer = null;
+
 function showToast(msg) {
   const toast = document.getElementById('toast');
   toast.textContent = msg;
   toast.classList.remove('hidden');
-  setTimeout(() => toast.classList.add('hidden'), 2000);
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => {
+    toast.classList.add('hidden');
+    toastTimer = null;
+  }, 2000);
 }
 
 /* ===== Init ===== */
